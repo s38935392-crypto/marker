@@ -38,12 +38,23 @@ bot.start(async (ctx) => {
 
   if (error) console.error("Users upsert error:", error.message);
 
-  await ctx.reply(
-    `👋 Xush kelibsiz, ${user.first_name}!\n\nKIMOTO MARKET'ga xush kelibsiz. Quyidagi tugma orqali do'konni oching:`,
-    Markup.keyboard([
-      [Markup.button.webApp("🛒 Do'konni ochish", process.env.WEBAPP_URL)],
-    ]).resize()
-  );
+  const webAppUrl = process.env.WEBAPP_URL;
+
+  if (webAppUrl) {
+    await ctx.reply(
+      `👋 Xush kelibsiz, ${user.first_name}!\n\nKIMOTO MARKET'ga xush kelibsiz. Quyidagi tugma orqali do'konni oching:`,
+      Markup.keyboard([
+        [Markup.button.webApp("🛒 Do'konni ochish", webAppUrl)],
+      ]).resize()
+    );
+  } else {
+    await ctx.reply(
+      `👋 Xush kelibsiz, ${user.first_name}!\n\nKIMOTO MARKET'ga xush kelibsiz! 🛒\n\nDo'konimizga kirish uchun quyidagi havoladan foydalaning.`,
+      Markup.inlineKeyboard([
+        [Markup.button.url("🛒 Do'konni ochish", "https://my-market.vercel.app")],
+      ])
+    );
+  }
 });
 
 // =====================
